@@ -1,4 +1,5 @@
 import Button from '../../components/Button'
+import Modal from '../../components/Modal'
 import Slider from '../../components/Slider/index'
 import api from '../../services/api'
 import getImages from '../../utils/getImages'
@@ -7,11 +8,12 @@ import { useState, useEffect } from 'react'
 
 function Home () {
 
-    const  [movie, setMovie] = useState()
-    const  [topMovies, setTopMovies] = useState()
-    const  [topSeries, setTopSeries] = useState()
-    const  [popularSeries, setPopularSeries] = useState()
-    const  [topActor, setTopActor] = useState()
+    const [showModal, setShowModal] = useState(false)
+    const [movie, setMovie] = useState()
+    const [topMovies, setTopMovies] = useState()
+    const [topSeries, setTopSeries] = useState()
+    const [popularSeries, setPopularSeries] = useState()
+    const [topActor, setTopActor] = useState()
     
     useEffect( () => {
 
@@ -20,7 +22,7 @@ function Home () {
                 data: { results }
             } = await api.get('/movie/popular')
 
-            setMovie(results[12])
+            setMovie(results[0])
         }
 
         async function getTopMovies() {
@@ -51,9 +53,8 @@ function Home () {
             const {
                 data: { results }
             } = await api.get('/person/popular')
-            setTopActor(results)
 
-            console.log(results)
+             setTopActor(results)
         }
 
         getMovies()
@@ -67,13 +68,14 @@ function Home () {
         <>
         {movie && (
             <Background img={getImages(movie.backdrop_path)}>
+                {showModal && <Modal movieId={movie.id} setShowModal={setShowModal} />}
                 <Container>
                     <Info>
                         <h1>{movie.title}</h1>
                         <p>{movie.overview}</p>
                         <ContainerButtons>
                             <Button red={true}>Assista Agora</Button>
-                            <Button red={false}>Assista o Trailer</Button>
+                            <Button red={false} onClick={() => setShowModal(true)} >Assista o Trailer</Button>
                         </ContainerButtons>
                     </Info>
                     <Poster>

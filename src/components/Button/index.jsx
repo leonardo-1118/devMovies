@@ -1,12 +1,12 @@
 import { RedButton, WhiteButton } from './styled.js'
 
-function Button({ children, red }) {
+function Button({ children, red, ...rest }) {
     return (
         <>
             {red ? (
-            <RedButton>{children}</RedButton>
+            <RedButton {...rest}>{children}</RedButton>
             ) : (
-            <WhiteButton>{children}</WhiteButton>
+            <WhiteButton {...rest}>{children}</WhiteButton>
             )}
         </>
     )
